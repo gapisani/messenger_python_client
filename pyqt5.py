@@ -21,7 +21,6 @@ class Read(QThread):
             if(internal_server.connect_):
                 text_list = internal_server.read_messages() # Читаем сообщение
                 for i in text_list:
-                    print(i)
                     self.return_msg.emit(i) # Возвращение сообщения
 
 # Освновной класс.
@@ -76,7 +75,8 @@ class mywindow(QtWidgets.QMainWindow):
                         "ip": ip,
                         "port": port,
                         "nickname": nickname,
-                        "password": password
+                        "password": password,
+                        "chat_list": list(self.chat_messages)
                     }, ws)
 
 
@@ -143,8 +143,7 @@ class mywindow(QtWidgets.QMainWindow):
                 self.ui.chat.append(i)
         else:
             value["chat"] = []
-        time = datetime.now().strftime("%H:%M") # Получение времени в формате Час:Минута
-        if(platform.system() == "Linux" and False): # Если ОС с ядром Linux
+        if(platform.system() == "Linux" and self.isHidden()): # Если ОС с ядром Linux
             os.system(f"notify-send -a Messenger \"{value}\"") # То показываем уведомление
 
     def keyPressEvent(self, e): # Эвент на нажатие клавиши на клавиатуре
