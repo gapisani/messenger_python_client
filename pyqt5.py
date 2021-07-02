@@ -20,8 +20,9 @@ class Read(QThread):
             except: continue
             if(internal_server.connect_):
                 text_list = internal_server.read_messages() # Читаем сообщение
-                for i in text_list:
-                    self.return_msg.emit(i) # Возвращение сообщения
+                if(text_list is not None):
+                    for i in text_list:
+                        self.return_msg.emit(i) # Возвращение сообщения
 
 # Освновной класс.
 class mywindow(QtWidgets.QMainWindow):
@@ -149,6 +150,8 @@ class mywindow(QtWidgets.QMainWindow):
     def keyPressEvent(self, e): # Эвент на нажатие клавиши на клавиатуре
         if e.key() == Qt.Key_Return: # Если это ентер
             self.sendMessage() # Отправляем сообщение
+        if e.key() == Qt.Key_Escape:
+            sys.exit()
 
 
 app = QtWidgets.QApplication([]) # Запуск приложения

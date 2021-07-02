@@ -3,10 +3,11 @@ import socket, json, sys
 
 class Client:
     def __init__(self, ip, port, nickname, password):
-        self.server = (ip, port) # Инициализация
+        self.server   = (ip, port) # Инициализация
         self.nickname = nickname
         self.password = password
         self.connect_ = False
+        self.key      = None
 
     def connect(self):
         self.sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) # Создание сокета
@@ -41,13 +42,14 @@ class Client:
         self.connect_ = False
 
     def read_messages(self): # Чтение
-        data = self.sock.recv(1024)
+        data = self.sock.recv(1048576)
         text = data.decode('utf-8')
-        return(json.loads(text))
+        json_text = json.loads(text)
+        return(json_text)
 
     def write_message(self, msg, chat="#main", chat_key=None): # Отправка сообщений
         if(self.connect_): # Если подключен
-            if(msg.replace(" ", "") != "s"): # Если сообщение не пустое
+            if(msg.replace(" ", "") != ""): # Если сообщение не пустое
                 self.sock.sendto( # Отправка сообщений
                     json.dumps(
                             {
